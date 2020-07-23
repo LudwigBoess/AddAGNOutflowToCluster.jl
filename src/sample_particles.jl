@@ -84,7 +84,7 @@ end
 
 
 function construct_internal_energy(par::OutflowParameters)
-    return par.T .* ones(par.Npart) ./ par.units.T_cgs
+    return par.T .* ones(par.Npart) ./ par.units.T_K
 end
 
 function construct_mass(par::OutflowParameters)
