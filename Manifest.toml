@@ -1,0 +1,111 @@
+# This file is machine-generated - editing it directly is not advised
+
+[[Base64]]
+uuid = "2a0f44e3-6c83-55bd-87e4-b1978d98bd5f"
+
+[[ConstructionBase]]
+git-tree-sha1 = "a2a6a5fea4d6f730ec4c18a76d27ec10e8ec1c50"
+uuid = "187b0558-2788-49d3-abe0-74a17ed4e7c9"
+version = "1.0.0"
+
+[[Dates]]
+deps = ["Printf"]
+uuid = "ade2ca70-3891-5945-98fb-dc099432e06a"
+
+[[DelimitedFiles]]
+deps = ["Mmap"]
+uuid = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+
+[[Distributed]]
+deps = ["Random", "Serialization", "Sockets"]
+uuid = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[[GadgetIO]]
+deps = ["Dates", "DelimitedFiles", "ProgressMeter", "Test"]
+git-tree-sha1 = "11f01938f07b7bafaa76f3ddc85d442fa3f5cb14"
+repo-rev = "master"
+repo-url = "https://github.com/LudwigBoess/GadgetIO.jl"
+uuid = "826b50da-1eb7-48f3-bd4b-d2350582c309"
+version = "0.2.0"
+
+[[GadgetUnits]]
+deps = ["Test", "Unitful", "UnitfulAstro"]
+git-tree-sha1 = "54d6cd9f1eeb9ce5680ff0eb3de7d4b335a10589"
+repo-rev = "master"
+repo-url = "https://github.com/LudwigBoess/GadgetUnits.jl"
+uuid = "08630afb-492b-4c1a-9729-2a116101b53a"
+version = "0.1.0"
+
+[[InteractiveUtils]]
+deps = ["Markdown"]
+uuid = "b77e0a4c-d291-57a0-90e8-8db25a27a240"
+
+[[Libdl]]
+uuid = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+
+[[LinearAlgebra]]
+deps = ["Libdl"]
+uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
+[[Logging]]
+uuid = "56ddb016-857b-54e1-b83d-db4d58db5568"
+
+[[Markdown]]
+deps = ["Base64"]
+uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
+
+[[Mmap]]
+uuid = "a63ad114-7e13-5084-954f-fe012c677804"
+
+[[Printf]]
+deps = ["Unicode"]
+uuid = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+
+[[ProgressMeter]]
+deps = ["Distributed", "Printf"]
+git-tree-sha1 = "2de4cddc0ceeddafb6b143b5b6cd9c659b64507c"
+uuid = "92933f4c-e287-5a05-a399-4b506db050ca"
+version = "1.3.2"
+
+[[Random]]
+deps = ["Serialization"]
+uuid = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+
+[[Serialization]]
+uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
+
+[[Sockets]]
+uuid = "6462fe0b-24de-5631-8697-dd941f90decc"
+
+[[SparseArrays]]
+deps = ["LinearAlgebra", "Random"]
+uuid = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
+[[Statistics]]
+deps = ["LinearAlgebra", "SparseArrays"]
+uuid = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+
+[[Test]]
+deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
+uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[[Unicode]]
+uuid = "4ec0a83e-493e-50e2-b9ac-8f72acf5a8f5"
+
+[[Unitful]]
+deps = ["ConstructionBase", "LinearAlgebra", "Random"]
+git-tree-sha1 = "a061dada333813818aa7454f93c63a5cab6ea981"
+uuid = "1986cc42-f94f-5a68-af5c-568840ba703d"
+version = "1.3.0"
+
+[[UnitfulAngles]]
+deps = ["Dates", "Unitful"]
+git-tree-sha1 = "dd21b5420bf6e9b76a8c6e56fb575319e7b1f895"
+uuid = "6fb2a4bd-7999-5318-a3b2-8ad61056cd98"
+version = "0.6.1"
+
+[[UnitfulAstro]]
+deps = ["Unitful", "UnitfulAngles"]
+git-tree-sha1 = "b154be4ca9610e9c9dbb9dba98b2bd750539630b"
+uuid = "6112ee07-acf9-5e0f-b108-d242c714bf9f"
+version = "1.0.1"

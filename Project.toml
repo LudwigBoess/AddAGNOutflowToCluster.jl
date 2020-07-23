@@ -1,0 +1,10 @@
+name = "AddAGNOutflowToCluster"
+uuid = "43317450-ab27-44fd-ac5a-155ce627f344"
+authors = ["di67meg "]
+version = "0.1.0"
+
+[deps]
+GadgetIO = "826b50da-1eb7-48f3-bd4b-d2350582c309"
+GadgetUnits = "08630afb-492b-4c1a-9729-2a116101b53a"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
