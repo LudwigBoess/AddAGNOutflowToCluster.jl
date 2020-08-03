@@ -1,4 +1,5 @@
 using GadgetIO
+using Base.Threads
 
 function output_time(t1, t2)
     return Float64((t2-t1))*1.e-9
@@ -13,7 +14,7 @@ function read_data_gas(fi::String, dtype::DataType)
     vel  = read_block_by_name(fi, "VEL",  info=info_3d, parttype=0) 
     u    = read_block_by_name(fi, "U",    info=info_1d, parttype=0)
     m    = read_block_by_name(fi, "MASS", info=info_1d, parttype=0)
-    B    = read_block_by_name(fi, "BFLD", info=info_1d, parttype=0)
+    B    = read_block_by_name(fi, "BFLD", info=info_3d, parttype=0)
 
     return Float32.(pos), Float32.(vel), Float32.(u), Float32.(m), Float32.(B)
 end
@@ -30,7 +31,7 @@ function read_data_collisionless(fi::String, parttype::Int64, dtype::DataType)
     return Float32.(pos), Float32.(vel), Float32.(m)
 end
 
-function correct_com(pos, par::OutflowParameters)
+function correct_com(pos::Array{<:Real}, par::OutflowParameters)
 
     x, v, m = read_data_collisionless(par.input_snap, 1, par.ic_format)
 
@@ -54,13 +55,27 @@ function correct_com(pos, par::OutflowParameters)
     return pos
 end
 
-function write_to_file(pos_outflow, vel_outflow, u_outflow, m_outflow, B_outflow, par::OutflowParameters)
+function correct_center(pos::Array{<:Real}, cen::Array{<:Real})
+
+    @threads for i = 1:length(pos[:,1])
+        @inbounds for j = 1:3
+            pos[i,j] += cen[j]
+        end
+    end
+
+    return pos
+end 
+
+function write_to_file( pos_outflow::Array{<:Real}, vel_outflow::Array{<:Real}, 
+                        u_outflow::Array{<:Real}, m_outflow::Array{<:Real}, 
+                        B_outflow::Array{<:Real}, par::OutflowParameters)
 
     if par.verbose
-        @info "  shifting outflow to COM"
+        @info "  shifting outflow to center of box"
         t1 = time_ns()
     end
 
+    pos_outflow  = correct_center(pos_outflow, par.center)
 
     if par.verbose
         t2 = time_ns()
@@ -90,19 +105,19 @@ function write_to_file(pos_outflow, vel_outflow, u_outflow, m_outflow, B_outflow
     vel = zeros(Float32, (Ntotal, 3) )
     u   = zeros(Float32, header.npart[1]+Nhalo )
     m   = zeros(Float32, Ntotal )
-    B   = zeros(Float32, header.npart[1]+Nhalo )
+    B   = zeros(Float32, (header.npart[1]+Nhalo, 3) )
 
     # assign halo particles
     pos[1:Nhalo,:] = Float32.(pos_outflow)
     vel[1:Nhalo,:] = Float32.(vel_outflow)
     u[1:Nhalo]     = Float32.(u_outflow)
     m[1:Nhalo]     = Float32.(m_outflow)
-    B[1:Nhalo]     = Float32.(B_outflow)
+    B[1:Nhalo,:]   = Float32.(B_outflow)
  
     # read old gas particles
     Nstart = Nhalo + 1
     Npart  = header.npart[1]
-    pos[Nstart:Nstart+Npart-1,:], vel[Nstart:Nstart+Npart-1,:], u[Nstart:Nstart+Npart-1], m[Nstart:Nstart+Npart-1], B[Nstart:Nstart+Npart-1] = read_data_gas(par.input_snap, par.ic_format)
+    pos[Nstart:Nstart+Npart-1,:], vel[Nstart:Nstart+Npart-1,:], u[Nstart:Nstart+Npart-1], m[Nstart:Nstart+Npart-1], B[Nstart:Nstart+Npart-1, :] = read_data_gas(par.input_snap, par.ic_format)
 
     # read collisionless particles
     @inbounds for parttype = 1:5

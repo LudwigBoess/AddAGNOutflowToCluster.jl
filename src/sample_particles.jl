@@ -2,7 +2,7 @@ using Base.Threads
 using LinearAlgebra
 using Statistics
 
-function spherical_to_cartesian(r::Float64, ϕ::Float64, θ::Float64)
+function spherical_to_cartesian(r::Real, ϕ::Real, θ::Real)
 
     x = r * cos(ϕ) * sin(θ)
     y = r * sin(ϕ) * sin(θ)
@@ -11,16 +11,16 @@ function spherical_to_cartesian(r::Float64, ϕ::Float64, θ::Float64)
     return x, y, z
 end
 
-function cartesian_to_spherical(x, y, z)
+function cartesian_to_spherical(x::Real, y::Real, z::Real)
     
     r = sqrt(x^2 + y^2 + z^2)
-    θ = atan(div(y, x))
-    ϕ = acos(div(z,r))
+    θ = atan( y / x )
+    ϕ = acos( z / r )
     
     return r, θ, ϕ
 end
 
-function compute_outflow(pos::Vector{Float64}, prop0::Float64)
+function compute_outflow(pos::Array{<:Real}, prop0::Real)
 
     # r, θ, ϕ = cartesian_to_spherical(pos[1], pos[2], pos[3])
     # return spherical_to_cartesian(prop0, θ, ϕ)
@@ -30,7 +30,7 @@ function compute_outflow(pos::Vector{Float64}, prop0::Float64)
     return pos[1] * prop0, pos[2] * prop0, pos[3] * prop0
 end
 
-function sample_particles(Npart::Int64, θ_cone::Float64, r_max::Float64)
+function sample_particles(Npart::Integer, θ_cone::Real, r_max::Real)
 
     θ_cone = deg2rad(θ_cone)
 
@@ -56,7 +56,7 @@ function sample_particles(Npart::Int64, θ_cone::Float64, r_max::Float64)
 end
 
 
-function construct_velocities(Npart::Int64, pos::Array{Float64,2}, v0::Float64)
+function construct_velocities(Npart::Integer, pos::Array{<:Real}, v0::Real)
 
     vx = zeros(Npart)
     vy = zeros(Npart)
@@ -69,7 +69,7 @@ function construct_velocities(Npart::Int64, pos::Array{Float64,2}, v0::Float64)
     return [vx vy vz]
 end
 
-function construct_Bfield(Npart::Int64, pos::Array{Float64,2}, B0::Float64)
+function construct_Bfield(Npart::Integer, pos::Array{<:Real}, B0::Real)
 
     Bx = zeros(Npart)
     By = zeros(Npart)
@@ -87,8 +87,27 @@ function construct_internal_energy(par::OutflowParameters)
     return par.T .* ones(par.Npart) ./ par.units.T_K
 end
 
+# function construct_mass(par::OutflowParameters)
+#     info_1d = Info_Line("POS", par.ic_format, 1, [1, 1, 1, 1, 1, 1])
+#     m    = read_block_by_name(par.input_snap, "MASS", info=info_1d, parttype=0)
+#     return ones(par.Npart) .* mean(m)
+# end
+
+# function cone_volume(par)
+#     return ( 4π/3 * par.r_max^3 ( 1.0 - cos(deg2rad(par.theta_cone))))
+# end
+
+# function construct_mass(par::OutflowParameters)
+#     vol = cone_volume(par)
+#     ρ   = par.rho0 / par.units.rho_cgs
+#     m   = ρ * vol  / par.Npart
+#     return ones(par.Npart) .* m
+# end
+
+
+
 function construct_mass(par::OutflowParameters)
-    info_1d = Info_Line("POS", par.ic_format, 1, [1, 1, 1, 1, 1, 1])
-    m    = read_block_by_name(par.input_snap, "MASS", info=info_1d, parttype=0)
-    return ones(par.Npart) .* mean(m)
+    m   = par.m_outflow / par.units.m_cgs / par.Npart
+    @info "  Mass of a single particle: m = $m"
+    return ones(par.Npart) .* m
 end
