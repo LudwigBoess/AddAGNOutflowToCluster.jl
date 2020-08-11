@@ -118,6 +118,8 @@ function write_to_file( pos_outflow::Array{<:Real}, vel_outflow::Array{<:Real},
     Nstart = Nhalo + 1
     Npart  = header.npart[1]
     pos[Nstart:Nstart+Npart-1,:], vel[Nstart:Nstart+Npart-1,:], u[Nstart:Nstart+Npart-1], m[Nstart:Nstart+Npart-1], B[Nstart:Nstart+Npart-1, :] = read_data_gas(par.input_snap, par.ic_format)
+    
+    Nstart += Npart
 
     # read collisionless particles
     @inbounds for parttype = 1:5
